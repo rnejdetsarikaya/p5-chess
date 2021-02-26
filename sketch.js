@@ -5,6 +5,14 @@ var b_king;
 var board;
 var w_img;
 var b_img;
+var w_rook;
+var b_rook;
+var w_knight;
+var b_knight;
+var w_bishop;
+var b_bishop;
+var w_queen;
+var b_queen;
 let size = 90;
 var offset = 200;
 var source;
@@ -12,11 +20,49 @@ var destination;
 var blankSize = 10;
 var move_sound;
 var eat_sound;
+const pieces = {
+	KING:"k",
+	QUEEN:"q",
+	ROOK:"r",
+	KNIGHT:"n",
+	BISHOP:"b",
+	PAWN:"p",
+	EMPTY:"e"
+}
+var pieces_images;
+
+const loadImages = () =>{
+	w_pawn = loadImage('./images/pawn.svg');
+	b_pawn = loadImage('./images/pawn2.svg');
+	w_king = loadImage('./images/king.svg');
+	b_king = loadImage('./images/king2.svg');
+	w_rook = loadImage('./images/rook.svg');
+	b_rook = loadImage('./images/rook2.svg');
+	w_knight = loadImage('./images/knight.svg');
+	b_knight = loadImage('./images/knight2.svg');
+	w_bishop = loadImage('./images/bishop.svg');
+	b_bishop = loadImage('./images/bishop2.svg');
+	w_queen = loadImage('./images/queen.svg');
+	b_queen = loadImage('./images/queen2.svg');
+	pieces_images ={
+		"r":w_rook,
+		"n":w_knight,
+		"b":w_bishop,
+		"q":w_queen,
+		"k":w_king,
+		"p":w_pawn,
+		"R":b_rook,
+		"N":b_knight,
+		"B":b_bishop,
+		"Q":b_queen,
+		"K":b_king,
+		"P":b_pawn
+	}
+}
+let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
+//var sampleNotation = "r__qr_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
 function preload(){
-	w_pawn = loadImage('./images/pawn.png');
-	b_pawn = loadImage('./images/pawn2.png');
-	w_king = loadImage('./images/king.png');
-	b_king = loadImage('./images/king2.png');
+	loadImages()
 	move_sound = loadSound('./sounds/move.wav',()=>move_sound.play())
 	eat_sound = loadSound('./sounds/eat.mp3');
 	w_img = createImage(blankSize,blankSize);
@@ -37,16 +83,13 @@ function setup() {
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);
 	board = make2Darray(8,8);
-	
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j)%2==0;
-			if(j==1 || j==6)
-				board[i][j] = j==1 ? w_pawn:b_pawn;
-			else if(j==0 || j==7)
-				board[i][j] = j==0 ? w_king:b_king;
+			if(boardNotation[i*8+j] != "_")
+				board[i][j] = {"image":pieces_images[boardNotation[i*8+j]],"type":boardNotation[i*8+j],"color":i==0||i==1 ? "w":"b"};
 			else
-				board[i][j] = flag ? b_img:w_img;
+				board[i][j] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
 		}
 	}
 	console.log(board)
@@ -62,7 +105,7 @@ function draw() {
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j) % 2 == 0;
 			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? 150:255);
-			image(board[i][j],(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
+			image(board[i][j].image,(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
 			fill(255,2,0)
 			text(i+","+j,(i*size)+offset/2,(j*size)+offset/2+size)
 		}
@@ -77,7 +120,6 @@ const findIndex = () =>{
 	}
 	let posX = Math.floor((mouseX-blank_area)/size)
 	let posY = Math.floor((mouseY-blank_area)/size)
-	console.log(isBlank(posX,posY))
 	if(!source && isBlank(posX,posY))
 		return;
 	if(!source){
@@ -103,7 +145,10 @@ const make2Darray = (cols,rows) =>{
 }
 
 const drawCell = (x,y,color) =>{
-	fill(color)
+	if(source && x==source[0]*size+offset/2 && y==source[1]*size+offset/2)
+		fill(0,200,50)
+	else
+		fill(color)
 	rect(x,y,size,size);
 }
 
@@ -119,15 +164,22 @@ const move = (s,d) =>{
 		eat_sound.play()
 	else
 		move_sound.play()
+	
 	let temp = board[sourceX][sourceY];
-	console.log(temp)
 	let flag = (sourceX+sourceY)%2 == 0;
-	board[sourceX][sourceY] = flag ? b_img:w_img;
+	board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
 	board[destinationX][destinationY] = temp;
+	boardNotation = replaceAt(boardNotation,sourceX*8+sourceY,"_");
+	boardNotation = replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
 	source = null;
 	destination = null;
+	console.log(boardNotation)
 }
 
 const isBlank = (x,y) =>{
-	return board[x][y].height == blankSize;
+	return board[x][y].image.height == blankSize;
+}
+
+const replaceAt = (str,index, replacement) =>{
+    return str.substr(0, index) + replacement + str.substr(index + replacement.length);
 }

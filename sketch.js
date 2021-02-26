@@ -7,13 +7,20 @@ var w_img;
 var b_img;
 let size = 90;
 var offset = 200;
+var source;
+var destination;
+var blankSize = 10;
+var move_sound;
+var eat_sound;
 function preload(){
 	w_pawn = loadImage('./images/pawn.png');
 	b_pawn = loadImage('./images/pawn2.png');
 	w_king = loadImage('./images/king.png');
 	b_king = loadImage('./images/king2.png');
-	w_img = createImage(10,10);
-	b_img = createImage(10,10);
+	move_sound = loadSound('./sounds/move.wav',()=>move_sound.play())
+	eat_sound = loadSound('./sounds/eat.mp3');
+	w_img = createImage(blankSize,blankSize);
+	b_img = createImage(blankSize,blankSize);
 	w_img.loadPixels();
 	b_img.loadPixels();
 	for (let i = 0; i < w_img.width; i++) {
@@ -46,7 +53,7 @@ function setup() {
 }
 
 function draw() {
-	background(100,75,124)
+	background(0,0,second()*8)
 	w_pawn.resize(50, 50);
 	b_pawn.resize(50, 50);
 	w_king.resize(50, 50);
@@ -56,6 +63,8 @@ function draw() {
 			let flag = (i+j) % 2 == 0;
 			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? 150:255);
 			image(board[i][j],(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
+			fill(255,2,0)
+			text(i+","+j,(i*size)+offset/2,(j*size)+offset/2+size)
 		}
 	}
 }
@@ -66,9 +75,22 @@ const findIndex = () =>{
 		//alert("oyun dışı")
 		return;
 	}
-	let posX = Math.floor((mouseX-blank_area)/size+1)
-	let posY = Math.floor((mouseY-blank_area)/size+1)
-	console.log(board[posX-1][posY-1].height != 10)
+	let posX = Math.floor((mouseX-blank_area)/size)
+	let posY = Math.floor((mouseY-blank_area)/size)
+	console.log(isBlank(posX,posY))
+	if(!source && isBlank(posX,posY))
+		return;
+	if(!source){
+		source = new Array(posX,posY);
+		console.log(source);
+		return;
+	}
+	if(!destination){
+		destination = new Array(posX,posY);
+		console.log(destination);
+	}
+
+	move(source,destination);
 	//alert(posX+","+posY,"-")
 }
 
@@ -83,4 +105,29 @@ const make2Darray = (cols,rows) =>{
 const drawCell = (x,y,color) =>{
 	fill(color)
 	rect(x,y,size,size);
+}
+
+const move = (s,d) =>{
+	if(!s)
+		return;
+	sourceX = s[0];
+	sourceY = s[1];
+	destinationX = d[0];
+	destinationY = d[1];
+	console.log("move!!")
+	if(!isBlank(destinationX,destinationY))
+		eat_sound.play()
+	else
+		move_sound.play()
+	let temp = board[sourceX][sourceY];
+	console.log(temp)
+	let flag = (sourceX+sourceY)%2 == 0;
+	board[sourceX][sourceY] = flag ? b_img:w_img;
+	board[destinationX][destinationY] = temp;
+	source = null;
+	destination = null;
+}
+
+const isBlank = (x,y) =>{
+	return board[x][y].height == blankSize;
 }

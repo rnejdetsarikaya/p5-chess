@@ -54,7 +54,7 @@ function draw() {
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j) % 2 == 0;
-			makeCell((i*size)+offset/2,(j*size)+offset/2,flag ? 150:255);
+			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? 150:255);
 			image(board[i][j],(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
 		}
 	}
@@ -80,7 +80,7 @@ const make2Darray = (cols,rows) =>{
 	return arr;
 }
 
-const makeCell = (x,y,color) =>{
+const drawCell = (x,y,color) =>{
 	fill(color)
-	return rect(x,y,size,size);
+	rect(x,y,size,size);
 }

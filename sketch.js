@@ -96,7 +96,7 @@ function setup() {
 }
 
 function draw() {
-	background(0,0,second()*8)
+	background(second()*8,0,0)
 	w_pawn.resize(50, 50);
 	b_pawn.resize(50, 50);
 	w_king.resize(50, 50);
@@ -124,15 +124,19 @@ const findIndex = () =>{
 		return;
 	if(!source){
 		source = new Array(posX,posY);
-		console.log(source);
 		return;
 	}
 	if(!destination){
+		if(source[0] == posX && source[1] == posY){//same piece again select
+			source = null;
+			return;
+		}
+	
 		destination = new Array(posX,posY);
 		console.log(destination);
 	}
-
-	move(source,destination);
+	if(checkMove(source,destination))
+		move(source,destination);
 	//alert(posX+","+posY,"-")
 }
 
@@ -173,7 +177,54 @@ const move = (s,d) =>{
 	boardNotation = replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
 	source = null;
 	destination = null;
-	console.log(boardNotation)
+	console.log(board)
+}
+
+const checkMove = (s,d) =>{
+	let sourceX = s[0];
+	let sourceY = s[1];
+	let destinationX = d[0];
+	let destinationY = d[1];
+	let destinationType = board[destinationX][destinationY].type;
+	let sourceType = board[sourceX][sourceY].type;
+	let color = board[sourceX][sourceY].color;
+	console.log("aaaa");
+	switch(sourceType.toLowerCase()){
+		case pieces.PAWN:
+			console.log("source: "+source);
+			console.log("dest: "+destination);
+			let stepValue =  color == "w" ? 1:-1;
+			console.log(checkFirstStepForPawn(destinationX,sourceX,stepValue))
+			console.log(checkCrossMove(s,d))
+			if((sourceY == destinationY && (destinationX-sourceX == stepValue || checkFirstStepForPawn(destinationX,sourceX,stepValue)) && destinationType == pieces.EMPTY) ||
+					(checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY))
+				return true;
+			break;
+		default:
+			return true;
+	}
+	destination = null;
+	return false;
+}
+
+const checkFirstStepForPawn = (destinationX,sourceX,stepValue)=>{
+	if((sourceX == 6 || sourceX == 1) && Math.abs(destinationX-sourceX) == Math.abs(stepValue*2))
+		return true;
+	return false;
+}
+
+const checkCrossMove = (s,d) =>{
+	let sourceX = s[0];
+	let sourceY = s[1];
+	let destinationX = d[0];
+	let destinationY = d[1];
+	let color = board[sourceX][sourceY].color;
+	if(destinationX==sourceX || destinationY==sourceY)
+		return 0;
+	if(Math.abs(destinationX-sourceX) != Math.abs(destinationY-sourceY) || Math.abs(sourceX-destinationX)!=Math.abs(sourceY-destinationY))
+		return 0;
+	else
+		return parseInt(color == "w" ? destinationX-sourceX:sourceX-destinationX);
 }
 
 const isBlank = (x,y) =>{

@@ -115,6 +115,10 @@ function draw() {
 			text(i+","+j,(i*size)+offset/2,(j*size)+offset/2+size)
 		}
 	}
+	textSize(50)
+	fill(255)
+	text(moveCount%2==0 ? "Hamle Beyazın":"Hamle Siyahın",0,50)
+	textSize(15)
 }
 
 const findIndex = () =>{

@@ -87,7 +87,7 @@ function setup() {
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j)%2==0;
 			if(boardNotation[i*8+j] != "_")
-				board[i][j] = {"image":pieces_images[boardNotation[i*8+j]],"type":boardNotation[i*8+j],"color":i==0||i==1 ? "w":"b"};
+				board[i][j] = {"image":pieces_images[boardNotation[i*8+j]],"type":boardNotation[i*8+j],"color":i==0||i==1 ? "w":"b","moveInfo":null};
 			else
 				board[i][j] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
 		}
@@ -133,7 +133,6 @@ const findIndex = () =>{
 		}
 	
 		destination = new Array(posX,posY);
-		console.log(destination);
 	}
 	if(checkMove(source,destination))
 		move(source,destination);
@@ -163,7 +162,6 @@ const move = (s,d) =>{
 	sourceY = s[1];
 	destinationX = d[0];
 	destinationY = d[1];
-	console.log("move!!")
 	if(!isBlank(destinationX,destinationY))
 		eat_sound.play()
 	else
@@ -177,7 +175,7 @@ const move = (s,d) =>{
 	boardNotation = replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
 	source = null;
 	destination = null;
-	console.log(board)
+	console.log(boardNotation)
 }
 
 const checkMove = (s,d) =>{
@@ -188,15 +186,14 @@ const checkMove = (s,d) =>{
 	let destinationType = board[destinationX][destinationY].type;
 	let sourceType = board[sourceX][sourceY].type;
 	let color = board[sourceX][sourceY].color;
-	console.log("aaaa");
 	switch(sourceType.toLowerCase()){
 		case pieces.PAWN:
-			console.log("source: "+source);
-			console.log("dest: "+destination);
 			let stepValue =  color == "w" ? 1:-1;
-			console.log(checkFirstStepForPawn(destinationX,sourceX,stepValue))
-			console.log(checkCrossMove(s,d))
-			if((sourceY == destinationY && (destinationX-sourceX == stepValue || checkFirstStepForPawn(destinationX,sourceX,stepValue)) && destinationType == pieces.EMPTY) ||
+			if(sourceY == destinationY && destinationX-sourceX == stepValue){
+				checkEnPassant(s);
+				board[sourceX][sourceY].moveInfo = null;
+			}
+			if((sourceY == destinationY && (destinationX-sourceX == stepValue || checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
 					(checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY))
 				return true;
 			break;
@@ -207,10 +204,65 @@ const checkMove = (s,d) =>{
 	return false;
 }
 
-const checkFirstStepForPawn = (destinationX,sourceX,stepValue)=>{
-	if((sourceX == 6 || sourceX == 1) && Math.abs(destinationX-sourceX) == Math.abs(stepValue*2))
+const checkFirstStepForPawn = (s,d,stepValue)=>{
+	let destinationX = d[0];
+	let sourceX = s[0];
+	let sourceY = s[1];
+	let otherPawn;
+	if((sourceX == 6 || sourceX == 1) && Math.abs(destinationX-sourceX) == Math.abs(stepValue*2)){
+		otherPawn = getPawnSameVertical(d,s);
+		if(otherPawn)
+			board[sourceX][sourceY].moveInfo = "2x";//first move 2 step,en passant
 		return true;
+	}
 	return false;
+}
+
+const checkEnPassant = (s) =>{
+	let sourceX = s[0];
+	let sourceY = s[1];
+	let flag = (sourceX+sourceY)%2 != 0;
+	let color = board[sourceX][sourceY].color;
+	let otherPiece;
+	
+	otherPiece = getPawnSameVertical(s,null);
+	if(!otherPiece)
+		return;
+	if(sourceY-1 >= 0 && board[sourceX][sourceY-1].moveInfo){
+		board[sourceX][sourceY-1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+		boardNotation = replaceAt(boardNotation,(sourceX)*8+sourceY-1,"_");
+		return;
+	}
+	if(sourceY+1 <= 7 && board[sourceX][sourceY+1].moveInfo){
+		board[sourceX][sourceY+1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+		boardNotation = replaceAt(boardNotation,(sourceX)*8+sourceY+1,"_");
+	}
+}
+
+const getPawnSameVertical = (s,d)=>{
+	let sourceX = s[0];
+	let sourceY = s[1];
+	let sourceColor
+	if(d){
+		sourceColor = board[d[0]][d[1]].color;
+	}else{
+		sourceColor = board[sourceX][sourceY].color;
+	}
+	let otherPawnColor = sourceColor == "w" ? "b":"w";
+	if(sourceY-1 >= 0){
+		otherPiece = board[sourceX][sourceY-1];
+		console.log(otherPiece)
+		if(otherPiece.type.toLowerCase() == pieces.PAWN && otherPiece.color==otherPawnColor){
+			return otherPiece;
+		}
+	}
+	if(sourceY+1 <= 7){
+		otherPiece = board[sourceX][sourceY+1];
+		if(otherPiece.type.toLowerCase() == pieces.PAWN && otherPiece.color==otherPawnColor){
+			return otherPiece;
+		}
+	}
+	return null;
 }
 
 const checkCrossMove = (s,d) =>{

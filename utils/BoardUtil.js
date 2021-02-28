@@ -45,11 +45,12 @@ function BoardUtil(){
         let destinationX = d[0];
         let destinationY = d[1];
         let destinationType = board[destinationX][destinationY].type;
+        let destinationColor = board[destinationX][destinationY].color;
         let sourceType = board[sourceX][sourceY].type;
-        let color = board[sourceX][sourceY].color;
+        let sourceColor = board[sourceX][sourceY].color;
         switch(sourceType.toLowerCase()){
             case pieces.PAWN:
-                let stepValue =  color == "w" ? 1:-1;
+                let stepValue =  sourceColor == "w" ? 1:-1;
                 if(sourceY == destinationY && destinationX-sourceX == stepValue){
                     pawnUtil.checkEnPassant(s);
                     board[sourceX][sourceY].moveInfo = null;
@@ -58,8 +59,14 @@ function BoardUtil(){
                         (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY))
                     return true;
                 break;
+            case pieces.BISHOP:
+                let croosStep = Math.abs(this.checkCrossMove(s,d));
+                console.log(sourceColor,destinationColor)
+                if(croosStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,croosStep) && (destinationType == pieces.EMPTY || destinationColor != sourceColor))
+                    return true;
+                break;
             default:
-                return true;
+                return false;
         }
         destination = null;
         return false;
@@ -77,5 +84,18 @@ function BoardUtil(){
             return 0;
         else
             return parseInt(color == "w" ? destinationX-sourceX:sourceX-destinationX);
+    }
+
+    this.checkPiecesOnCrossDiagonal = function(s,d,croosStep){
+        let sourceX = s[0];
+        let sourceY = s[1];
+        let croosX = d[0] - sourceX > 0 ? 1:-1;
+        let crossY = d[1] - sourceY > 0 ? 1:-1;
+        for(var i=0;i<croosStep-1;i++){
+            console.log(sourceX+croosX+i,sourceY+crossY+i)
+            if(board[sourceX+croosX][sourceY+crossY].type != pieces.EMPTY)
+                return false;
+        }
+        return true;
     }
 }

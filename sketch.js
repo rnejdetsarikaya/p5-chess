@@ -140,11 +140,11 @@ const findIndex = () =>{
 		source = new Array(posX,posY);
 		return;
 	}
+	if(source[0] == posX && source[1] == posY){//same piece again select
+		source = null;
+		return;
+	}
 	if(!destination){
-		if(source[0] == posX && source[1] == posY){//same piece again select
-			source = null;
-			return;
-		}
 	
 		destination = new Array(posX,posY);
 	}

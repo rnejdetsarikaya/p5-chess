@@ -1,3 +1,5 @@
+var boardDarkColor;
+var boardLightColor;
 var w_pawn;
 var b_pawn;
 var w_king;
@@ -64,7 +66,7 @@ const loadImages = () =>{
 	}
 }
 let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
-//var sampleNotation = "r__qr_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
+//var boardNotation = "r_q_r_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
 function preload(){
 	loadImages()
 	move_sound = loadSound('./sounds/move.wav',()=>move_sound.play())
@@ -75,8 +77,8 @@ function preload(){
 	b_img.loadPixels();
 	for (let i = 0; i < w_img.width; i++) {
 		for (let j = 0; j < w_img.height; j++) {
-			w_img.set(i, j, color(255));
-			b_img.set(i, j, color(150));
+			w_img.set(i, j, boardLightColor);
+			b_img.set(i, j, boardDarkColor);
 		}
 	}
 	w_img.updatePixels();
@@ -89,6 +91,8 @@ function setup() {
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);
 	board = boardUtil.make2Darray(8,8);
+	boardDarkColor = color(0,255,0);
+	boardLightColor = color(255,255,255);
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j)%2==0;
@@ -110,7 +114,7 @@ function draw() {
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j) % 2 == 0;
-			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? 150:255);
+			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? boardDarkColor:boardLightColor);
 			image(board[i][j].image,(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
 			fill(255,2,0)
 			text(i+","+j,(i*size)+offset/2,(j*size)+offset/2+size)

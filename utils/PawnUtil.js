@@ -61,6 +61,5 @@ function PawnUtil(){
             board[sourceX][sourceY+1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
             boardNotation = boardUtil.replaceAt(boardNotation,(sourceX)*8+sourceY+1,"_");
         }
-    }
-    
+    }    
 }

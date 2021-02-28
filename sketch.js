@@ -23,6 +23,7 @@ var eat_sound;
 let pawnUtil;
 let boardUtil;
 let moveCount = 0;
+var changedPieceForPawn = false;
 const pieces = {
 	KING:"k",
 	QUEEN:"q",
@@ -119,6 +120,16 @@ function draw() {
 	fill(255)
 	text(moveCount%2==0 ? "Hamle Beyazın":"Hamle Siyahın",0,50)
 	textSize(15)
+	if(changedPieceForPawn){
+		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
+		var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
+		changedPieceType = color == "w" ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
+		if(pieces_images[changedPieceType]){
+			board[changedPieceForPawn[0]][changedPieceForPawn[1]] = {"image":pieces_images[changedPieceType],"type":changedPieceType,"color":color,"moveInfo":null}
+			boardNotation = boardUtil.replaceAt(boardNotation,destinationX*8+destinationY,changedPieceType);
+			changedPieceForPawn = null;
+		}
+	}
 }
 
 const findIndex = () =>{
@@ -145,10 +156,12 @@ const findIndex = () =>{
 		return;
 	}
 	if(!destination){
-	
 		destination = new Array(posX,posY);
 	}
 	if(boardUtil.checkMove(source,destination)){
+		let type = board[source[0]][source[1]].type.toLowerCase();
+		if((posX == 0 || posX == 7) && type == pieces.PAWN)
+			changedPieceForPawn = destination;
 		boardUtil.move(source,destination);
 		moveCount++;
 	}

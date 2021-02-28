@@ -130,6 +130,11 @@ function draw() {
 			changedPieceForPawn = null;
 		}
 	}
+
+	for(var i=0;i<8;i++){
+		text(String.fromCharCode(65+i),60,offset*3/4+size*i)
+		text(i+1,offset*2/3+size*i,850)
+	}
 }
 
 const findIndex = () =>{

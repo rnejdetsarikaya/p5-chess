@@ -49,6 +49,7 @@ function BoardUtil(){
         let sourceType = board[sourceX][sourceY].type;
         let sourceColor = board[sourceX][sourceY].color;
         let step;
+        let crossStep;
         switch(sourceType.toLowerCase()){
             case pieces.PAWN:
                 let stepValue =  sourceColor == "w" ? 1:-1;
@@ -62,20 +63,27 @@ function BoardUtil(){
                 break;
 
             case pieces.BISHOP:
-                step = Math.abs(this.checkCrossMove(s,d));
-                console.log(this.checkPiecesOnCrossDiagonal(s,d,step))
-                if(step > 0  && this.checkPiecesOnCrossDiagonal(s,d,step) && (destinationType == pieces.EMPTY || destinationColor != sourceColor))
+                crossStep = Math.abs(this.checkCrossMove(s,d));
+                if(crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
                     return true;
                 break;
 
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
-                console.log(this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))
-                if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && (destinationType == pieces.EMPTY || destinationColor != sourceColor))
+                console.log(step)
+                if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
                     return true;
+                break;
+
+            case pieces.QUEEN:
+                step = this.checkVerticalAndHorizantalMove(s,d);
+                crossStep = this.checkCrossMove(s,d);
+                if(((crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                    return true;
+                break;
             default:
-                destination = null;
-                return false;
+            destination = null;
+            return false;
         }
         destination = null;
         return false;
@@ -101,7 +109,6 @@ function BoardUtil(){
         let stepX = d[0] - sourceX > 0 ? 1:-1;
         let stepY = d[1] - sourceY > 0 ? 1:-1;
         for(var i=0;i<step-1;i++){
-            console.log(sourceX+stepX+i,sourceY+stepY+i)
             if(board[sourceX += stepX][sourceY += stepY].type != pieces.EMPTY)
                 return false;
         }
@@ -123,9 +130,7 @@ function BoardUtil(){
         let sourceY = s[1];
         let stepX = this.getStepValue(sourceX, d[0]);
         let stepY = this.getStepValue(sourceY, d[1]);
-        console.log(stepX,stepY)
         for(var i=0;i<step-1;i++){
-            console.log(sourceX+stepX,sourceY+stepY)
             if(board[sourceX += stepX][sourceY += stepY].type != pieces.EMPTY)
                 return false;
         }
@@ -139,5 +144,9 @@ function BoardUtil(){
             return -1;
         else
             return 0;
+    }
+
+    this.checkTypeAndColor = function(destinationType,destinationColor,sourceColor){
+        return destinationType == pieces.EMPTY || destinationColor != sourceColor;
     }
 }

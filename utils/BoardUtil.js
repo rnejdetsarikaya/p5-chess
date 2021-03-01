@@ -81,6 +81,13 @@ function BoardUtil(){
                 if(((crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
                     return true;
                 break;
+
+            case pieces.KNIGHT:
+                let x = Math.abs(sourceX-destinationX);
+                let y = Math.abs(sourceY-destinationY);
+                if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                    return true;
+                break;
             default:
             destination = null;
             return false;

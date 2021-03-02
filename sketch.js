@@ -24,6 +24,7 @@ var move_sound;
 var eat_sound;
 let pawnUtil;
 let boardUtil;
+let kingUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
 const pieces = {
@@ -66,7 +67,8 @@ const loadImages = () =>{
 	}
 }
 let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
-//var boardNotation = "r_q_r_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
+//let boardNotation = "r_q_r_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
+//let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()
 	move_sound = loadSound('./sounds/move.wav',()=>move_sound.play())
@@ -87,6 +89,7 @@ function preload(){
 function setup() {
 	pawnUtil = new PawnUtil();
 	boardUtil = new BoardUtil();
+	kingUtil = new KingUtil();
 	var wh = size*8+offset;
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);
@@ -96,8 +99,9 @@ function setup() {
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j)%2==0;
-			if(boardNotation[i*8+j] != "_")
-				board[i][j] = {"image":pieces_images[boardNotation[i*8+j]],"type":boardNotation[i*8+j],"color":i==0||i==1 ? "w":"b","moveInfo":null};
+			let notation = boardNotation[i*8+j]
+			if(notation != "_")
+				board[i][j] = {"image":pieces_images[notation],"type":notation,"color":notation == notation.toLowerCase() ? "w":"b","moveInfo":null};
 			else
 				board[i][j] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
 		}

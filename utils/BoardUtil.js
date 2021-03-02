@@ -23,7 +23,7 @@ function BoardUtil(){
         sourceY = s[1];
         destinationX = d[0];
         destinationY = d[1];
-        if(!boardUtil.isBlank(destinationX,destinationY))
+        if(!this.isBlank(destinationX,destinationY))
             eat_sound.play()
         else
             move_sound.play()
@@ -32,8 +32,8 @@ function BoardUtil(){
         let flag = (sourceX+sourceY)%2 == 0;
         board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
         board[destinationX][destinationY] = temp;
-        boardNotation = boardUtil.replaceAt(boardNotation,sourceX*8+sourceY,"_");
-        boardNotation = boardUtil.replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
+        boardNotation = this.replaceAt(boardNotation,sourceX*8+sourceY,"_");
+        boardNotation = this.replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
         source = null;
         destination = null;
         console.log(boardNotation)
@@ -88,9 +88,16 @@ function BoardUtil(){
                 if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
                     return true;
                 break;
+
+            case pieces.KING:
+                step = this.checkVerticalAndHorizantalMove(s,d);
+                crossStep = this.checkCrossMove(s,d);
+                if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d))
+                    return true;
+                break;
             default:
-            destination = null;
-            return false;
+                destination = null;
+                return false;
         }
         destination = null;
         return false;

@@ -23,11 +23,9 @@ function BoardUtil(){
         sourceY = s[1];
         destinationX = d[0];
         destinationY = d[1];
-        if(!this.isBlank(destinationX,destinationY))
-            eat_sound.play()
-        else
-            move_sound.play()
-        
+
+        this.isBlank(destinationX,destinationY) ? move_sound.play():eat_sound.play();
+
         let temp = board[sourceX][sourceY];
         let flag = (sourceX+sourceY)%2 == 0;
         board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
@@ -66,13 +64,14 @@ function BoardUtil(){
 
             case pieces.BISHOP:
                 crossStep = Math.abs(this.checkCrossMove(s,d));
-                if(crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                if(crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
+                    kingLocation = this.check(board[sourceX][sourceY].color,bishopUtil.getTargetCells(s,d));
                     return true;
+                }
                 break;
 
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
-                console.log(step)
                 if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
                     return true;
                 break;
@@ -96,8 +95,10 @@ function BoardUtil(){
             case pieces.KING:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
-                if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d))
+                if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d)){
+                    kingLocation = null; //not check anymore
                     return true;
+                }
                 break;
             default:
                 destination = null;

@@ -26,6 +26,7 @@ let pawnUtil;
 let boardUtil;
 let kingUtil;
 let knightUtil;
+let bishopUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
 let kingLocation = null;
@@ -68,8 +69,8 @@ const loadImages = () =>{
 		"P":b_pawn
 	}
 }
-//let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
-let boardNotation = "r_q_r___pp____Bp___pp_p____P_____P__k_Pn_____p_P_P__nP_BPR___QRK_";
+let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
+//let boardNotation = "r_q_r___pp____Bp___pp_p____P_____P__k_Pn_____p_P_P__nP_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()
@@ -93,6 +94,7 @@ function setup() {
 	boardUtil = new BoardUtil();
 	kingUtil = new KingUtil();
 	knightUtil = new KnightUtil();
+	bishopUtil = new BishopUtil();
 	var wh = size*8+offset;
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);

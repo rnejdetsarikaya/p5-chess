@@ -28,6 +28,7 @@ let kingUtil;
 let knightUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
+let kingLocation = null;
 const pieces = {
 	KING:"k",
 	QUEEN:"q",
@@ -67,8 +68,8 @@ const loadImages = () =>{
 		"P":b_pawn
 	}
 }
-let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
-//let boardNotation = "r_q_r_k_pp____Bp___pp_p____P_________Pn__P__p_P_P__nP_BPR___QRK_";
+//let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
+let boardNotation = "r_q_r___pp____Bp___pp_p____P_____P__k_Pn_____p_P_P__nP_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()
@@ -129,6 +130,7 @@ function draw() {
 	textSize(50)
 	fill(255)
 	text(moveCount%2==0 ? "Hamle Beyazın":"Hamle Siyahın",0,50)
+	{kingLocation && text("Check!!",750,50)}
 	textSize(15)
 	if(changedPieceForPawn){
 		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
@@ -184,8 +186,11 @@ const findIndex = () =>{
 
 const drawCell = (x,y,color) =>{
 	if(source && x==source[0]*size+offset/2 && y==source[1]*size+offset/2)
-		fill(0,200,50)
+		fill(0,200,50) //selection
+	else if(kingLocation && x==kingLocation[0]*size+offset/2 && y==kingLocation[1]*size+offset/2){
+		fill(250,150,100) //check
+	}
 	else
-		fill(color)
+		fill(color) //default
 	rect(x,y,size,size);
 }

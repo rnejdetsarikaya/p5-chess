@@ -59,7 +59,7 @@ function BoardUtil(){
                 }
                 if((sourceY == destinationY && (destinationX-sourceX == stepValue || pawnUtil.checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
                         (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY)){
-                            pawnUtil.getTargetCells(s,d);
+                            kingLocation = this.check(board[sourceX][sourceY].color,pawnUtil.getTargetCells(s,d));
                             return true;
                         }
                 break;
@@ -88,7 +88,7 @@ function BoardUtil(){
                 let x = Math.abs(sourceX-destinationX);
                 let y = Math.abs(sourceY-destinationY);
                 if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    knightUtil.getTargetCells(s,d);
+                    kingLocation = this.check(board[sourceX][sourceY].color,knightUtil.getTargetCells(s,d));
                     return true;
                 }
                 break;
@@ -153,6 +153,16 @@ function BoardUtil(){
                 return false;
         }
         return true;
+    }
+
+    this.check = function(color,targets){
+        console.log(color,targets)
+        for(var i=0;i<targets.length;i++){
+            let cell = board[targets[i][0]][targets[i][1]];
+            if(cell.type.toLowerCase() == pieces.KING && cell.color != color)
+                return targets[i];//king location
+        }
+        return null;
     }
 
     this.getStepValue = function(s,d){

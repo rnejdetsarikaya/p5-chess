@@ -77,7 +77,6 @@ function PawnUtil(){
             targets.push([x,destinationY+1])
         if(destinationY-1 >= 0 && (board[x][destinationY-1].type == pieces.EMPTY || board[x][destinationY-1].color != color))
             targets.push([x,destinationY-1])
-        console.log(targets)
         return targets;
     }
 }

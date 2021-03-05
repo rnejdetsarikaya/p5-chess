@@ -22,6 +22,6 @@ function KnightUtil(){
                 targets.push([i,j]);
             }
         }   
-        console.log(targets)
+        return targets;
     }
 }

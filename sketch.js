@@ -25,6 +25,7 @@ var eat_sound;
 let pawnUtil;
 let boardUtil;
 let kingUtil;
+let knightUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
 const pieces = {
@@ -90,6 +91,7 @@ function setup() {
 	pawnUtil = new PawnUtil();
 	boardUtil = new BoardUtil();
 	kingUtil = new KingUtil();
+	knightUtil = new KnightUtil();
 	var wh = size*8+offset;
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);

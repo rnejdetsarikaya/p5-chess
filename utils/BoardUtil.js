@@ -58,8 +58,10 @@ function BoardUtil(){
                     board[sourceX][sourceY].moveInfo = null;
                 }
                 if((sourceY == destinationY && (destinationX-sourceX == stepValue || pawnUtil.checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
-                        (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY))
-                    return true;
+                        (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY)){
+                            pawnUtil.getTargetCells(s,d);
+                            return true;
+                        }
                 break;
 
             case pieces.BISHOP:
@@ -85,8 +87,10 @@ function BoardUtil(){
             case pieces.KNIGHT:
                 let x = Math.abs(sourceX-destinationX);
                 let y = Math.abs(sourceY-destinationY);
-                if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
+                    knightUtil.getTargetCells(s,d);
                     return true;
+                }
                 break;
 
             case pieces.KING:

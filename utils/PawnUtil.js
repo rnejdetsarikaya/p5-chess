@@ -61,5 +61,23 @@ function PawnUtil(){
             board[sourceX][sourceY+1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
             boardNotation = boardUtil.replaceAt(boardNotation,(sourceX)*8+sourceY+1,"_");
         }
-    }    
+    }   
+    
+    this.getTargetCells = function(s,d){
+        let targets = [];
+        let sourceX = s[0];
+        let sourceY = s[1];
+        let destinationX = d[0];
+        let destinationY = d[1];
+
+        let color = board[sourceX][sourceY].color;
+        let stepValue =  color == "w" ? 1:-1;
+        let x = destinationX+stepValue;
+        if(destinationY+1 <= 7 && (board[x][destinationY+1].type == pieces.EMPTY || board[x][destinationY+1].color != color))
+            targets.push([x,destinationY+1])
+        if(destinationY-1 >= 0 && (board[x][destinationY-1].type == pieces.EMPTY || board[x][destinationY-1].color != color))
+            targets.push([x,destinationY-1])
+        console.log(targets)
+        return targets;
+    }
 }

@@ -73,6 +73,8 @@ function PawnUtil(){
         let color = board[sourceX][sourceY].color;
         let stepValue =  color == "w" ? 1:-1;
         let x = destinationX+stepValue;
+        if(destinationX-1 < 0 || destinationX+1 > 7)
+            return targets;
         if(destinationY+1 <= 7 && (board[x][destinationY+1].type == pieces.EMPTY || board[x][destinationY+1].color != color))
             targets.push([x,destinationY+1])
         if(destinationY-1 >= 0 && (board[x][destinationY-1].type == pieces.EMPTY || board[x][destinationY-1].color != color))

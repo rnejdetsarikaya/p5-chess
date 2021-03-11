@@ -73,7 +73,7 @@ function BoardUtil(){
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    console.log(rookUtil.getTargetCells(s,d));
+                    kingLocation = this.check(board[sourceX][sourceY].color,rookUtil.getTargetCells(s,d));
                     return true;
                 }
                 break;
@@ -162,8 +162,11 @@ function BoardUtil(){
         console.log(color,targets)
         for(var i=0;i<targets.length;i++){
             let cell = board[targets[i][0]][targets[i][1]];
-            if(cell.type.toLowerCase() == pieces.KING && cell.color != color)
+            if(cell.type.toLowerCase() == pieces.KING && cell.color != color){
+                check_sound.rate(2);
+                check_sound.play();
                 return targets[i];//king location
+            }
         }
         return null;
     }

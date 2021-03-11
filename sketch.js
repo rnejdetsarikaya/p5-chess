@@ -22,6 +22,7 @@ var destination;
 var blankSize = 10;
 var move_sound;
 var eat_sound;
+var check_sound;
 let pawnUtil;
 let boardUtil;
 let kingUtil;
@@ -77,6 +78,7 @@ function preload(){
 	loadImages()
 	move_sound = loadSound('./sounds/move.wav',()=>move_sound.play())
 	eat_sound = loadSound('./sounds/eat.mp3');
+	check_sound = loadSound('./sounds/check.mp3');
 	w_img = createImage(blankSize,blankSize);
 	b_img = createImage(blankSize,blankSize);
 	w_img.loadPixels();

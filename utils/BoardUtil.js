@@ -34,7 +34,6 @@ function BoardUtil(){
         boardNotation = this.replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
         source = null;
         destination = null;
-        console.log(boardNotation)
     }
 
     this.checkMove = function(s,d){
@@ -159,7 +158,6 @@ function BoardUtil(){
     }
 
     this.check = function(color,targets){
-        console.log(color,targets)
         for(var i=0;i<targets.length;i++){
             let cell = board[targets[i][0]][targets[i][1]];
             if(cell.type.toLowerCase() == pieces.KING && cell.color != color){

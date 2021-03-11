@@ -28,7 +28,6 @@ function PawnUtil(){
         let otherPawnColor = sourceColor == "w" ? "b":"w";
         if(sourceY-1 >= 0){
             otherPiece = board[sourceX][sourceY-1];
-            console.log(otherPiece)
             if(otherPiece.type.toLowerCase() == pieces.PAWN && otherPiece.color==otherPawnColor){
                 return otherPiece;
             }

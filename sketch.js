@@ -185,6 +185,11 @@ const findIndex = () =>{
 		let type = board[source[0]][source[1]].type.toLowerCase();
 		if((posX == 0 || posX == 7) && type == pieces.PAWN)
 			changedPieceForPawn = destination;
+		let notation = String.fromCharCode(97+destination[1])+(destination[0]+1);
+		let pieceType = board[source[0]][source[1]].type;
+		let eatFlag = board[destination[0]][destination[1]].type.toLowerCase() == pieces.EMPTY;
+		notation = eatFlag ? notation:((pieceType.toLowerCase()==pieces.PAWN ? String.fromCharCode(97+source[1]):"")+"x"+notation);
+		console.log(pieceType.toLowerCase()==pieces.PAWN ? notation:pieceType.toUpperCase()+notation);//notation for moves
 		boardUtil.move(source,destination);
 		moveCount++;
 	}

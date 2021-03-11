@@ -17,7 +17,6 @@ function BishopUtil(){
                 if(x < 0 || x > 7 || y < 0 || y > 7)
                 continue;
                 if(board[x][y].type != pieces.EMPTY && !(x == sourceX && y == sourceY)){
-                    console.log("x,y:"+x,y);
                     if(board[x][y].color != color)
                         targets.push([x,y]);
                     break;

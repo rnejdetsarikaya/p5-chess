@@ -72,8 +72,10 @@ function BoardUtil(){
 
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
-                if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
+                    console.log(rookUtil.getTargetCells(s,d));
                     return true;
+                }
                 break;
 
             case pieces.QUEEN:

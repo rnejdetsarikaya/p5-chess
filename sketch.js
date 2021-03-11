@@ -27,6 +27,7 @@ let boardUtil;
 let kingUtil;
 let knightUtil;
 let bishopUtil;
+let rookUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
 let kingLocation = null;
@@ -95,6 +96,7 @@ function setup() {
 	kingUtil = new KingUtil();
 	knightUtil = new KnightUtil();
 	bishopUtil = new BishopUtil();
+	rookUtil = new RookUtil();
 	var wh = size*8+offset;
 	let cnv = createCanvas(wh,wh);
 	cnv.mousePressed(findIndex);

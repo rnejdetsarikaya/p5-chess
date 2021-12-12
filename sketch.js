@@ -15,7 +15,7 @@ var w_bishop;
 var b_bishop;
 var w_queen;
 var b_queen;
-let size = 90;
+let size = 60;
 var offset = 200;
 var source;
 var destination;
@@ -71,7 +71,7 @@ const loadImages = () =>{
 		"P":b_pawn
 	}
 }
-let boardNotation = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR";
+let boardNotation = "rnbqkbnrpppppppp"+"_".repeat(32)+"PPPPPPPPRNBQKBNR";
 //let boardNotation = "r_q_r___pp____Bp___pp_p____P_____P__k_Pn_____p_P_P__nP_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){

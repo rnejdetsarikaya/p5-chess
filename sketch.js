@@ -41,6 +41,11 @@ const pieces = {
 	PAWN:"p",
 	EMPTY:"e"
 }
+
+const colors = {
+	WHITE:"w",
+	BLACK:"b"
+}
 var pieces_images;
 
 const loadImages = () =>{
@@ -110,9 +115,9 @@ function setup() {
 			let flag = (i+j)%2==0;
 			let notation = boardNotation[i*8+j]
 			if(notation != "_")
-				board[i][j] = {"image":pieces_images[notation],"type":notation,"color":notation == notation.toLowerCase() ? "w":"b","moveInfo":null};
+				board[i][j] = {"image":pieces_images[notation],"type":notation,"color":notation == notation.toLowerCase() ? colors.WHITE:colors.BLACK,"moveInfo":null};
 			else
-				board[i][j] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+				board[i][j] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? colors.BLACK:colors.WHITE}
 		}
 	}
 	console.log(board)
@@ -141,7 +146,7 @@ function draw() {
 	if(changedPieceForPawn){
 		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
 		var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
-		changedPieceType = color == "w" ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
+		changedPieceType = color == colors.WHITE ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
 		if(pieces_images[changedPieceType]){
 			board[changedPieceForPawn[0]][changedPieceForPawn[1]] = {"image":pieces_images[changedPieceType],"type":changedPieceType,"color":color,"moveInfo":null}
 			boardNotation = boardUtil.replaceAt(boardNotation,destinationX*8+destinationY,changedPieceType);
@@ -168,7 +173,7 @@ const findIndex = () =>{
 		return;
 	if(!source){
 		color = board[posX][posY].color;
-		let moveFlag = color == "w" ? 0:1;
+		let moveFlag = color == colors.WHITE ? 0:1;
 		if(moveCount%2 != moveFlag)//move control- white first than black
 			return;
 		source = new Array(posX,posY);

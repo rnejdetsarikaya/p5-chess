@@ -28,7 +28,7 @@ function BoardUtil(){
 
         let temp = board[sourceX][sourceY];
         let flag = (sourceX+sourceY)%2 == 0;
-        board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+        board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? colors.BLACK:colors.WHITE}
         board[destinationX][destinationY] = temp;
         boardNotation = this.replaceAt(boardNotation,sourceX*8+sourceY,"_");
         boardNotation = this.replaceAt(boardNotation,destinationX*8+destinationY,temp.type);
@@ -49,7 +49,7 @@ function BoardUtil(){
         let crossStep;
         switch(sourceType.toLowerCase()){
             case pieces.PAWN:
-                let stepValue =  sourceColor == "w" ? 1:-1;
+                let stepValue =  sourceColor == colors.WHITE ? 1:-1;
                 if((sourceY == destinationY && (destinationX-sourceX == stepValue || pawnUtil.checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
                         (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY)){
                     kingLocation = this.check(board[sourceX][sourceY].color,pawnUtil.getTargetCells(s,d));
@@ -121,7 +121,7 @@ function BoardUtil(){
         if(Math.abs(destinationX-sourceX) != Math.abs(destinationY-sourceY) || Math.abs(sourceX-destinationX)!=Math.abs(sourceY-destinationY))
             return 0;
         else
-            return parseInt(color == "w" ? destinationX-sourceX:sourceX-destinationX);
+            return parseInt(color == colors.WHITE ? destinationX-sourceX:sourceX-destinationX);
     }
 
     this.checkPiecesOnCrossDiagonal = function(s,d,step){

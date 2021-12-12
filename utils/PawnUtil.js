@@ -25,7 +25,7 @@ function PawnUtil(){
         }else{
             sourceColor = board[sourceX][sourceY].color;
         }
-        let otherPawnColor = sourceColor == "w" ? "b":"w";
+        let otherPawnColor = sourceColor == colors.WHITE ? colors.BLACK:colors.WHITE;
         if(sourceY-1 >= 0){
             otherPiece = board[sourceX][sourceY-1];
             if(otherPiece.type.toLowerCase() == pieces.PAWN && otherPiece.color==otherPawnColor){
@@ -50,13 +50,13 @@ function PawnUtil(){
         let color = board[sourceX][sourceY].color;
         let otherPiece;
         console.log(board[destinationX-1][destinationY].moveInfo)
-        if(color == "w" && board[destinationX-1][destinationY].moveInfo){
-            board[destinationX-1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+        if(color == colors.WHITE && board[destinationX-1][destinationY].moveInfo){
+            board[destinationX-1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? colors.BLACK:colors.WHITE}
             boardNotation = boardUtil.replaceAt(boardNotation,(destinationX)*8+destinationY-1,"_");
             return true;
         }
-        if(color == "b" && board[destinationX+1][destinationY].moveInfo){
-            board[destinationX+1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+        if(color == colors.BLACK && board[destinationX+1][destinationY].moveInfo){
+            board[destinationX+1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? colors.BLACK:colors.WHITE}
             boardNotation = boardUtil.replaceAt(boardNotation,(destinationX)*8+destinationY+1,"_");
             return true;
         }
@@ -71,7 +71,7 @@ function PawnUtil(){
         let destinationY = d[1];
 
         let color = board[sourceX][sourceY].color;
-        let stepValue =  color == "w" ? 1:-1;
+        let stepValue =  color == colors.WHITE ? 1:-1;
         let x = destinationX+stepValue;
         if(destinationX-1 < 0 || destinationX+1 > 7)
             return targets;

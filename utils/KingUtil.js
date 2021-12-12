@@ -4,7 +4,7 @@ function KingUtil(){
         let destinationY = d[1];
         let sourceX = s[0];
         let sourceY = s[1];
-        let color = board[s[0]][s[1]].color == "w" ? "b":"w";
+        let color = board[s[0]][s[1]].color == colors.WHITE ? colors.BLACK:colors.WHITE;
         let sourceType = board[sourceX][sourceY].type;
         let type = sourceType == sourceType.toUpperCase() ? sourceType.toLowerCase():sourceType.toUpperCase();
         for(var i=-1;i<2;i++){

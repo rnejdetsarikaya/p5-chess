@@ -41,25 +41,26 @@ function PawnUtil(){
         return null;
     }
 
-    this.checkEnPassant = function(s){
+    this.checkEnPassant = function(s,d){
+        let destinationX = d[0];
+        let destinationY = d[1];
         let sourceX = s[0];
         let sourceY = s[1];
         let flag = (sourceX+sourceY)%2 != 0;
         let color = board[sourceX][sourceY].color;
         let otherPiece;
-        
-        otherPiece = this.getPawnSameVertical(s,null);
-        if(!otherPiece)
-            return;
-        if(sourceY-1 >= 0 && board[sourceX][sourceY-1].moveInfo){
-            board[sourceX][sourceY-1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
-            boardNotation = boardUtil.replaceAt(boardNotation,(sourceX)*8+sourceY-1,"_");
-            return;
+        console.log(board[destinationX-1][destinationY].moveInfo)
+        if(color == "w" && board[destinationX-1][destinationY].moveInfo){
+            board[destinationX-1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+            boardNotation = boardUtil.replaceAt(boardNotation,(destinationX)*8+destinationY-1,"_");
+            return true;
         }
-        if(sourceY+1 <= 7 && board[sourceX][sourceY+1].moveInfo){
-            board[sourceX][sourceY+1] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
-            boardNotation = boardUtil.replaceAt(boardNotation,(sourceX)*8+sourceY+1,"_");
+        if(color == "b" && board[destinationX+1][destinationY].moveInfo){
+            board[destinationX+1][destinationY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? "b":"w"}
+            boardNotation = boardUtil.replaceAt(boardNotation,(destinationX)*8+destinationY+1,"_");
+            return true;
         }
+        return false;
     }   
     
     this.getTargetCells = function(s,d){

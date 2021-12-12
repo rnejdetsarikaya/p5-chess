@@ -50,15 +50,16 @@ function BoardUtil(){
         switch(sourceType.toLowerCase()){
             case pieces.PAWN:
                 let stepValue =  sourceColor == "w" ? 1:-1;
-                if(sourceY == destinationY && destinationX-sourceX == stepValue){
-                    pawnUtil.checkEnPassant(s);
-                    board[sourceX][sourceY].moveInfo = null;
-                }
                 if((sourceY == destinationY && (destinationX-sourceX == stepValue || pawnUtil.checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
                         (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY)){
-                            kingLocation = this.check(board[sourceX][sourceY].color,pawnUtil.getTargetCells(s,d));
-                            return true;
-                        }
+                    kingLocation = this.check(board[sourceX][sourceY].color,pawnUtil.getTargetCells(s,d));
+                    return true;
+                }
+
+                if(this.checkCrossMove(s,d) == 1 && destinationType == pieces.EMPTY && pawnUtil.checkEnPassant(s,d)){
+                    board[sourceX][sourceY].moveInfo = null;
+                    return true;
+                }
                 break;
 
             case pieces.BISHOP:

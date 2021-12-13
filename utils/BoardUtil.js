@@ -183,4 +183,29 @@ function BoardUtil(){
     this.checkTypeAndColor = function(destinationType,destinationColor,sourceColor){
         return destinationType == pieces.EMPTY || destinationColor != sourceColor;
     }
+
+    this.getTargetCells = function(s,d,steps){
+        let targets = [];
+        let sourceX = s[0];
+        let sourceY = s[1];
+        let destinationX = d[0];
+        let destinationY = d[1];
+
+        let color = board[sourceX][sourceY].color;
+        for(var i=0;i<steps.length;i++){
+            for(var j=1;j<8;j++){
+                let x = destinationX + steps[i][0]*j;
+                let y = destinationY + steps[i][1]*j;
+                if(x < 0 || x > 7 || y < 0 || y > 7)
+                continue;
+                if(board[x][y].type != pieces.EMPTY && !(x == sourceX && y == sourceY)){
+                    if(board[x][y].color != color)
+                        targets.push([x,y]);
+                    break;
+                }
+                targets.push([x,y]);
+            }
+        }
+        return targets;
+    }
 }

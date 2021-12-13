@@ -82,6 +82,7 @@ function BoardUtil(){
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
                 if(((crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
+                    kingLocation = this.check(board[sourceX][sourceY].color,queenUtil.getTargetCells(s,d));
                     return true;
                 break;
 

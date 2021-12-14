@@ -98,11 +98,13 @@ function BoardUtil(){
             case pieces.KING:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
+                console.log(crossStep)
                 if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d)){
-                    let hasVerticalDanger = kingUtil.checkDanger(sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
-                    let horizontalDanger = kingUtil.checkDanger(sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
-                    kingLocation = hasVerticalDanger || horizontalDanger ? s : null;
-                    return true;
+                    let hasVerticalDanger = kingUtil.checkDanger(d, sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
+                    let horizontalDanger = kingUtil.checkDanger(d, sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
+                    if(!hasVerticalDanger && !horizontalDanger)
+                        kingLocation = null
+                        return true;
                 }
                 break;
             default:

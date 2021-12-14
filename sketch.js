@@ -181,6 +181,7 @@ const findIndex = () =>{
 		source = new Array(posX,posY);
 		return;
 	}
+	console.log(243)
 	if(source[0] == posX && source[1] == posY){//same piece again select
 		source = null;
 		return;

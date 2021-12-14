@@ -32,12 +32,27 @@ function KingUtil(){
         return null;
     }
 
-    this.checkDanger = function(color, targets, pieceList) {
+    this.checkDanger = function(d, color, targets, pieceList) {
+        let destinationX = d[0];
+        let destinationY = d[1];
+        console.log(d)
         for(var i=0;i<targets.length;i++){
-            let cell = board[targets[i][0]][targets[i][1]];
-            console.log("cell",cell)
-            if(pieceList.includes(cell.type.toLowerCase()) && cell.color != color){
-                return true;//king location
+            for(var j=1;j<8;j++){
+                let x = destinationX + targets[i][0]*j;
+                let y = destinationY + targets[i][1]*j;
+                if(x < 0 || x > 7 || y < 0 || y > 7){
+                    continue;
+                }
+
+                let type = board[x][y].type;
+                if(type == pieces.EMPTY){
+                    continue;
+                }
+                if(pieceList.includes(type.toLowerCase()) && board[x][y].color != color){
+                    console.log(type, x,y)
+                    return true;
+                }
+                break;
             }
         }
         return false;

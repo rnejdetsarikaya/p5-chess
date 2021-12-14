@@ -19,4 +19,27 @@ function KingUtil(){
         }
         return true;
     }
+
+    this.check = function(color,targets){
+        for(var i=0;i<targets.length;i++){
+            let cell = board[targets[i][0]][targets[i][1]];
+            if(cell.type.toLowerCase() == pieces.KING && cell.color != color){
+                check_sound.rate(2);
+                check_sound.play();
+                return targets[i];//king location
+            }
+        }
+        return null;
+    }
+
+    this.checkDanger = function(color, targets, pieceList) {
+        for(var i=0;i<targets.length;i++){
+            let cell = board[targets[i][0]][targets[i][1]];
+            console.log("cell",cell)
+            if(pieceList.includes(cell.type.toLowerCase()) && cell.color != color){
+                return true;//king location
+            }
+        }
+        return false;
+    }
 }

@@ -52,7 +52,7 @@ function BoardUtil(){
                 let stepValue =  sourceColor == colors.WHITE ? 1:-1;
                 if((sourceY == destinationY && (destinationX-sourceX == stepValue || pawnUtil.checkFirstStepForPawn(s,d,stepValue)) && destinationType == pieces.EMPTY) ||
                         (this.checkCrossMove(s,d) > 0 && destinationType != pieces.EMPTY)){
-                    kingLocation = this.check(board[sourceX][sourceY].color,pawnUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,pawnUtil.getTargetCells(s,d));
                     return true;
                 }
 
@@ -65,7 +65,7 @@ function BoardUtil(){
             case pieces.BISHOP:
                 crossStep = Math.abs(this.checkCrossMove(s,d));
                 if(crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = this.check(board[sourceX][sourceY].color,bishopUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,bishopUtil.getTargetCells(s,d));
                     return true;
                 }
                 break;
@@ -73,7 +73,7 @@ function BoardUtil(){
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = this.check(board[sourceX][sourceY].color,rookUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,rookUtil.getTargetCells(s,d));
                     return true;
                 }
                 break;
@@ -82,7 +82,7 @@ function BoardUtil(){
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
                 if(((crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
-                    kingLocation = this.check(board[sourceX][sourceY].color,queenUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,queenUtil.getTargetCells(s,d));
                     return true;
                 break;
 
@@ -90,7 +90,7 @@ function BoardUtil(){
                 let x = Math.abs(sourceX-destinationX);
                 let y = Math.abs(sourceY-destinationY);
                 if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = this.check(board[sourceX][sourceY].color,knightUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,knightUtil.getTargetCells(s,d));
                     return true;
                 }
                 break;
@@ -99,7 +99,9 @@ function BoardUtil(){
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
                 if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d)){
-                    kingLocation = null; //not check anymore
+                    let hasVerticalDanger = kingUtil.checkDanger(sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
+                    let horizontalDanger = kingUtil.checkDanger(sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
+                    kingLocation = hasVerticalDanger || horizontalDanger ? s : null;
                     return true;
                 }
                 break;
@@ -157,18 +159,6 @@ function BoardUtil(){
                 return false;
         }
         return true;
-    }
-
-    this.check = function(color,targets){
-        for(var i=0;i<targets.length;i++){
-            let cell = board[targets[i][0]][targets[i][1]];
-            if(cell.type.toLowerCase() == pieces.KING && cell.color != color){
-                check_sound.rate(2);
-                check_sound.play();
-                return targets[i];//king location
-            }
-        }
-        return null;
     }
 
     this.getStepValue = function(s,d){

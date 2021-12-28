@@ -35,7 +35,6 @@ function KingUtil(){
     this.checkDanger = function(d, color, targets, pieceList) {
         let destinationX = d[0];
         let destinationY = d[1];
-        console.log(d)
         for(var i=0;i<targets.length;i++){
             for(var j=1;j<8;j++){
                 let x = destinationX + targets[i][0]*j;
@@ -44,17 +43,25 @@ function KingUtil(){
                     continue;
                 }
 
-                let type = board[x][y].type;
+                let type = board[x][y].type.toLowerCase();
                 if(type == pieces.EMPTY){
                     continue;
                 }
-                if(pieceList.includes(type.toLowerCase()) && board[x][y].color != color){
+                if(pieceList.includes(type) && board[x][y].color != color || this.checkPawnDanger(j, type)){
                     console.log(type, x,y)
                     return true;
                 }
                 break;
             }
         }
+        return false;
+    }
+
+    this.checkPawnDanger = function(step, type) {
+        if(pieces.PAWN == type && step == 1) {
+            return true;
+        }
+        
         return false;
     }
 }

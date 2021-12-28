@@ -98,10 +98,12 @@ function BoardUtil(){
             case pieces.KING:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
+                console.log(step, crossStep)
                 if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d)){
                     let hasVerticalDanger = kingUtil.checkDanger(d, sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
-                    let horizontalDanger = kingUtil.checkDanger(d, sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
-                    if(!hasVerticalDanger && !horizontalDanger){
+                    let hasHorizontalDanger = kingUtil.checkDanger(d, sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
+                    console.log(hasVerticalDanger, hasHorizontalDanger)
+                    if(!hasVerticalDanger && !hasHorizontalDanger   ){
                         kingLocation = null
                         return true;
                     }
@@ -126,7 +128,7 @@ function BoardUtil(){
         if(Math.abs(destinationX-sourceX) != Math.abs(destinationY-sourceY) || Math.abs(sourceX-destinationX)!=Math.abs(sourceY-destinationY))
             return 0;
         else
-            return parseInt(color == colors.WHITE ? destinationX-sourceX:sourceX-destinationX);
+            return parseInt(color == colors.WHITE ? Math.abs(destinationX-sourceX): Math.abs(sourceX-destinationX));
     }
 
     this.checkPiecesOnCrossDiagonal = function(s,d,step){

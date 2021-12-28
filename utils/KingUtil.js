@@ -35,6 +35,7 @@ function KingUtil(){
     this.checkDanger = function(d, color, targets, pieceList) {
         let destinationX = d[0];
         let destinationY = d[1];
+        let direction = colors.WHITE == color ? 1 : -1;
         for(var i=0;i<targets.length;i++){
             for(var j=1;j<8;j++){
                 let x = destinationX + targets[i][0]*j;
@@ -47,7 +48,7 @@ function KingUtil(){
                 if(type == pieces.EMPTY){
                     continue;
                 }
-                if(pieceList.includes(type) && board[x][y].color != color || this.checkPawnDanger(j, type)){
+                if(board[x][y].color != color  && (pieceList.includes(type) || (this.checkPawnDanger(j, type) && direction == x-destinationX))){
                     console.log(type, x,y)
                     return true;
                 }

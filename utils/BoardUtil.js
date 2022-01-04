@@ -17,6 +17,7 @@ function BoardUtil(){
     }
 
     this.move = function(s,d){
+        console.log(s)
         if(!s)
             return;
         sourceX = s[0];
@@ -110,8 +111,14 @@ function BoardUtil(){
                     }
                 }
                 let firstXColumn = sourceColor == colors.WHITE ? 0 : 7;
-                if(step == 2 && sourceX == firstXColumn &&sourceX == destinationX && !board[sourceX][sourceY].moveInfo && kingUtil.checkCastling(destinationY)){
-                    destinationY == 2 ? alert("O-O-O") : alert("O-O")
+                if(step == 2 && sourceX == firstXColumn && sourceX == destinationX && !board[sourceX][sourceY].moveInfo && kingUtil.checkCastling(destinationY, sourceColor)){
+                    let y = destinationY == 2 ? 0 : 7
+                    let rookStepYFromKing = y == 0 ? 1 : -1;
+                    let x = sourceColor == colors.WHITE ? 0 : 7;
+                    this.move(new Array(x,y),new Array(destinationX,destinationY+rookStepYFromKing))
+                    source = s;
+                    destination = d;
+                    return true;
                 }
                 break;
             default:

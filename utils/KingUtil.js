@@ -66,11 +66,18 @@ function KingUtil(){
         return false;
     }
 
-    this.checkCastling = function(destinationY) {
-        if(destinationY == 2 || destinationY == 6) {
-            return true;
+    this.checkCastling = function(destinationY, color) {
+        let x = color == colors.WHITE ? 0 : 7;
+        if(destinationY == 2 && this.checkRookAvailableForCastling(x, 0)) {
+            return board[x][1].type == pieces.EMPTY && board[x][3].type == pieces.EMPTY && board[x][2].type == pieces.EMPTY;
         }
-
+        if(destinationY == 6 && this.checkRookAvailableForCastling(x, 7)) {
+            return board[x][5].type == pieces.EMPTY && board[x][6].type;
+        }
         return false;
+    }
+
+    this.checkRookAvailableForCastling = function(x, y) {
+        return board[x][y].type.toLowerCase() == pieces.ROOK;
     }
 }

@@ -103,10 +103,15 @@ function BoardUtil(){
                     let hasVerticalDanger = kingUtil.checkDanger(d, sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
                     let hasHorizontalDanger = kingUtil.checkDanger(d, sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal
                     console.log(hasVerticalDanger, hasHorizontalDanger)
-                    if(!hasVerticalDanger && !hasHorizontalDanger   ){
+                    if(!hasVerticalDanger && !hasHorizontalDanger){
                         kingLocation = null
+                        board[sourceX][sourceY].moveInfo = "moved!";
                         return true;
                     }
+                }
+                let firstXColumn = sourceColor == colors.WHITE ? 0 : 7;
+                if(step == 2 && sourceX == firstXColumn &&sourceX == destinationX && !board[sourceX][sourceY].moveInfo && kingUtil.checkCastling(destinationY)){
+                    destinationY == 2 ? alert("O-O-O") : alert("O-O")
                 }
                 break;
             default:

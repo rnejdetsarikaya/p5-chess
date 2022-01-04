@@ -65,4 +65,12 @@ function KingUtil(){
         
         return false;
     }
+
+    this.checkCastling = function(destinationY) {
+        if(destinationY == 2 || destinationY == 6) {
+            return true;
+        }
+
+        return false;
+    }
 }

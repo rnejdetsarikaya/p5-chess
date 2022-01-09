@@ -21,6 +21,7 @@ function KingUtil(){
     }
 
     this.check = function(color,targets){
+        console.log(color, targets)
         for(var i=0;i<targets.length;i++){
             let cell = board[targets[i][0]][targets[i][1]];
             if(cell.type.toLowerCase() == pieces.KING && cell.color != color){
@@ -80,4 +81,21 @@ function KingUtil(){
     this.checkRookAvailableForCastling = function(x, y) {
         return board[x][y].type.toLowerCase() == pieces.ROOK;
     }
+
+    this.checkByPieceType = function(piece, color, s, d) {//Queen,Rook,Knight,Bishop
+        switch(piece.toLowerCase()){
+            case pieces.QUEEN:
+                let value = this.check(color,queenUtil.getTargetCells(s,d));
+                console.log(s,d)
+                break;
+            case pieces.ROOK:
+                return this.check(color,rookUtil.getTargetCells(s,d));
+            case pieces.KNIGHT:
+                return this.check(color,knightUtil.getTargetCells(s,d));
+            case pieces.BISHOP:
+                return this.check(color,bishopUtil.getTargetCells(s,d));
+            default:
+                return null;
+        }
+    } 
 }

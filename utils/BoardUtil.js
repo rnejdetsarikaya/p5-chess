@@ -190,14 +190,13 @@ function BoardUtil(){
         return destinationType == pieces.EMPTY || destinationColor != sourceColor;
     }
 
-    this.getTargetCells = function(s,d,steps){
+    this.getTargetCells = function(s,d,steps, color){
         let targets = [];
         let sourceX = s[0];
         let sourceY = s[1];
         let destinationX = d[0];
         let destinationY = d[1];
 
-        let color = board[sourceX][sourceY].color;
         for(var i=0;i<steps.length;i++){
             for(var j=1;j<8;j++){
                 let x = destinationX + steps[i][0]*j;

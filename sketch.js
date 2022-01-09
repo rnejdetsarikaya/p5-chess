@@ -78,7 +78,7 @@ const loadImages = () =>{
 	}
 }
 //let boardNotation = "rnbqkbnrpppppppp"+"_".repeat(32)+"PPPPPPPPRNBQKBNR";
-let boardNotation = "r___k__rpp____Bp___pp_p____P_____P__q_Pn_____p_P_P__nP_BPR___QRK_";
+let boardNotation = "r___k__rppP___Bp___pp_p__________P__q_Pn_____p_P_P__nP_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()
@@ -150,6 +150,11 @@ function draw() {
 		var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
 		changedPieceType = color == colors.WHITE ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
 		if(pieces_images[changedPieceType]){
+			let pX = changedPieceForPawn[0];
+			let pY = changedPieceForPawn[1];
+			let d = new Array(pX,pY);
+			let s = new Array(pX + (color == colors.WHITE ? -1 : 1),pY);
+			kingLocation = kingUtil.checkByPieceType(changedPieceType, color, s, d);
 			board[changedPieceForPawn[0]][changedPieceForPawn[1]] = {"image":pieces_images[changedPieceType],"type":changedPieceType,"color":color,"moveInfo":null}
 			boardNotation = boardUtil.replaceAt(boardNotation,destinationX*8+destinationY,changedPieceType);
 			changedPieceForPawn = null;
@@ -188,7 +193,7 @@ const findIndex = () =>{
 	if(!destination){
 		destination = new Array(posX,posY);
 	}
-	if(boardUtil.checkMove(source,destination)){
+	if(boardUtil.checkMove(source,destination)){	
 		let type = board[source[0]][source[1]].type.toLowerCase();
 		if((posX == 0 || posX == 7) && type == pieces.PAWN)
 			changedPieceForPawn = destination;

@@ -66,7 +66,7 @@ function BoardUtil(){
             case pieces.BISHOP:
                 crossStep = Math.abs(this.checkCrossMove(s,d));
                 if(crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = kingUtil.check(sourceColor,bishopUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,bishopUtil.getTargetCells(s,d,sourceColor));
                     return true;
                 }
                 break;
@@ -74,7 +74,7 @@ function BoardUtil(){
             case pieces.ROOK:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 if(step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = kingUtil.check(sourceColor,rookUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,rookUtil.getTargetCells(s,d,sourceColor));
                     return true;
                 }
                 break;
@@ -83,7 +83,7 @@ function BoardUtil(){
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
                 if(((crossStep > 0  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step > 0 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor))
-                    kingLocation = kingUtil.check(sourceColor,queenUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,queenUtil.getTargetCells(s,d, sourceColor));
                     return true;
                 break;
 
@@ -91,7 +91,7 @@ function BoardUtil(){
                 let x = Math.abs(sourceX-destinationX);
                 let y = Math.abs(sourceY-destinationY);
                 if(((x==1 && y==2) || (x==2 && y==1)) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor)){
-                    kingLocation = kingUtil.check(sourceColor,knightUtil.getTargetCells(s,d));
+                    kingLocation = kingUtil.check(sourceColor,knightUtil.getTargetCells(s,d, sourceColor));
                     return true;
                 }
                 break;
@@ -196,7 +196,7 @@ function BoardUtil(){
         let sourceY = s[1];
         let destinationX = d[0];
         let destinationY = d[1];
-
+        alert(color)
         for(var i=0;i<steps.length;i++){
             for(var j=1;j<8;j++){
                 let x = destinationX + steps[i][0]*j;

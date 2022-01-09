@@ -78,7 +78,7 @@ const loadImages = () =>{
 	}
 }
 //let boardNotation = "rnbqkbnrpppppppp"+"_".repeat(32)+"PPPPPPPPRNBQKBNR";
-let boardNotation = "r___k__rppP___Bp___pp_p__________P__q_Pn_____p_P_P__nP_BPR___QRK_";
+let boardNotation = "r______rppP_k_Bp___pp_p__________P__q_Pn_____p_P_P__nP_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()
@@ -148,7 +148,9 @@ function draw() {
 	if(changedPieceForPawn){
 		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
 		var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
+		changedPieceType = changedPieceType == "K" ? "N":changedPieceType;//k is king not knight(n)
 		changedPieceType = color == colors.WHITE ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
+		
 		if(pieces_images[changedPieceType]){
 			let pX = changedPieceForPawn[0];
 			let pY = changedPieceForPawn[1];

@@ -1,11 +1,10 @@
 function KnightUtil(){
-    this.getTargetCells = function(s,d){
+    this.getTargetCells = function(s,d, color){
         let targets = [];
         let sourceX = s[0];
         let sourceY = s[1];
         let destinationX = d[0];
         let destinationY = d[1];
-        let color = board[sourceX][sourceY].color;
 
         let minX = destinationX-2;
         let maxX = destinationX+2;

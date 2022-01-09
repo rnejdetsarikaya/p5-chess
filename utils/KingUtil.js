@@ -85,15 +85,13 @@ function KingUtil(){
     this.checkByPieceType = function(piece, color, s, d) {//Queen,Rook,Knight,Bishop
         switch(piece.toLowerCase()){
             case pieces.QUEEN:
-                let value = this.check(color,queenUtil.getTargetCells(s,d));
-                console.log(s,d)
-                break;
+                return this.check(color,queenUtil.getTargetCells(s,d, color));
             case pieces.ROOK:
-                return this.check(color,rookUtil.getTargetCells(s,d));
+                return this.check(color,rookUtil.getTargetCells(s,d, color));
             case pieces.KNIGHT:
-                return this.check(color,knightUtil.getTargetCells(s,d));
+                return this.check(color,knightUtil.getTargetCells(s,d, color));
             case pieces.BISHOP:
-                return this.check(color,bishopUtil.getTargetCells(s,d));
+                return this.check(color,bishopUtil.getTargetCells(s,d, color));
             default:
                 return null;
         }

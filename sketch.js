@@ -1,6 +1,7 @@
 var boardDarkColor;
 var boardLightColor;
 var players;
+var eaten_opponent_pieces = [];
 var w_pawn;
 var b_pawn;
 var w_king;
@@ -129,7 +130,7 @@ function setup() {
 }
 
 function draw() {
-	background(second()*8,0,0);
+	background(255, 238, 173);
 	w_pawn.resize(50, 50);
 	b_pawn.resize(50, 50);
 	w_king.resize(50, 50);
@@ -168,8 +169,13 @@ function draw() {
 	}
 
 	for(var i=0;i<8;i++){
+		fill(0)
 		text(String.fromCharCode(65+i),60,offset*3/4+size*i)
 		text(i+1,offset*2/3+size*i,850)
+	}
+
+	for(var i=0; i<eaten_opponent_pieces.length;i++) {
+		image(eaten_opponent_pieces[i],0+(i*22),625,28,28)
 	}
 }
 

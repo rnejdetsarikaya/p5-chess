@@ -25,8 +25,12 @@ function BoardUtil(){
         destinationX = d[0];
         destinationY = d[1];
 
-        this.isBlank(destinationX,destinationY) ? move_sound.play():eat_sound.play();
-
+        if(this.isBlank(destinationX,destinationY)){
+            move_sound.play();
+        } else {
+            eat_sound.play();
+            eaten_opponent_pieces.push(board[destinationX][destinationY].image)
+        }
         let temp = board[sourceX][sourceY];
         let flag = (sourceX+sourceY)%2 == 0;
         board[sourceX][sourceY] = {"image":flag ? b_img:w_img,"type":pieces.EMPTY,"color":flag ? colors.BLACK:colors.WHITE}
@@ -99,7 +103,6 @@ function BoardUtil(){
             case pieces.KING:
                 step = this.checkVerticalAndHorizantalMove(s,d);
                 crossStep = this.checkCrossMove(s,d);
-                console.log(step, crossStep)
                 if(((crossStep == 1  && this.checkPiecesOnCrossDiagonal(s,d,crossStep)) || (step == 1 && this.checkPiecesOnVerticalAndHorizantalDiagonal(s,d,step))) && this.checkTypeAndColor(destinationType,destinationColor,sourceColor) && kingUtil.checkOtherKingOnAround(s,d)){
                     let hasVerticalDanger = kingUtil.checkDanger(d, sourceColor, [[0,1],[0,-1],[-1,0],[1,0]], [pieces.QUEEN, pieces.ROOK]);//vertical
                     let hasHorizontalDanger = kingUtil.checkDanger(d, sourceColor, [[1,1],[1,-1],[-1,1],[-1,-1]], [pieces.QUEEN, pieces.BISHOP]);//horizontal

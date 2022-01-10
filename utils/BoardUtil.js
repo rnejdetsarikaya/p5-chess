@@ -196,7 +196,6 @@ function BoardUtil(){
         let sourceY = s[1];
         let destinationX = d[0];
         let destinationY = d[1];
-        alert(color)
         for(var i=0;i<steps.length;i++){
             for(var j=1;j<8;j++){
                 let x = destinationX + steps[i][0]*j;

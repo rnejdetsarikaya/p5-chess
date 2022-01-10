@@ -78,7 +78,7 @@ const loadImages = () =>{
 	}
 }
 //let boardNotation = "rnbqkbnrpppppppp"+"_".repeat(32)+"PPPPPPPPRNBQKBNR";
-let boardNotation = "r______rppP_k_Bp___pp_p__________P__q_Pn_____p_P_P__nP_BPR___QRK_";
+let boardNotation = "r______rppP_k_Bp___pp_p__________P__q_Pn_____P_P_P__np_BPR___QRK_";
 //let boardNotation = "r_q_r_k_pp__K_Bp___pp_p____P__________Pn__P__p_P_P__nP_BPR___QR__";
 function preload(){
 	loadImages()

@@ -21,11 +21,10 @@ function KingUtil(){
     }
 
     this.check = function(color,targets){
-        console.log(color, targets)
         for(var i=0;i<targets.length;i++){
             let cell = board[targets[i][0]][targets[i][1]];
             if(cell.type.toLowerCase() == pieces.KING && cell.color != color){
-                check_sound.rate(2);
+                check_sound.rate(color == colors.WHITE ? 1.5 : 2.5);
                 check_sound.play();
                 return targets[i];//king location
             }

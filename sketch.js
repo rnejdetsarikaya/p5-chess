@@ -1,5 +1,6 @@
 var boardDarkColor;
 var boardLightColor;
+var players_gif;
 var w_pawn;
 var b_pawn;
 var w_king;
@@ -62,6 +63,8 @@ const loadImages = () =>{
 	b_bishop = loadImage('./images/bishop2.svg');
 	w_queen = loadImage('./images/queen.svg');
 	b_queen = loadImage('./images/queen2.svg');
+	//players_gif = loadGif('./images/giphy.gif');
+	
 	pieces_images ={
 		"r":w_rook,
 		"n":w_knight,
@@ -134,7 +137,7 @@ function draw() {
 	for(var i=0;i<board.length;i++){
 		for(var j=0;j<board[i].length;j++){
 			let flag = (i+j) % 2 == 0;
-			drawCell((i*size)+offset/2,(j*size)+offset/2,flag ? boardDarkColor:boardLightColor);
+			drawCell((i*size)+offset/2, (j*size)+offset/2, flag ? boardDarkColor:boardLightColor);
 			image(board[i][j].image,(i*size)+(offset+size)/2-25,(j*size)+(offset+size)/2-25)
 			fill(255,2,0)
 			text(i+","+j,(i*size)+offset/2,(j*size)+offset/2+size)
@@ -143,6 +146,7 @@ function draw() {
 	textSize(50)
 	fill(255)
 	text(moveCount%2==0 ? "Hamle Beyazın":"Hamle Siyahın",0,50)
+	
 	{kingLocation && text("Check!!",750,50)}
 	textSize(15)
 	if(changedPieceForPawn){

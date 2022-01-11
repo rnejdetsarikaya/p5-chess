@@ -35,6 +35,8 @@ let queenUtil;
 let moveCount = 0;
 var changedPieceForPawn = false;
 let kingLocation = null;
+let promotions = [];
+var changedPieceType;
 const pieces = {
 	KING:"k",
 	QUEEN:"q",
@@ -129,6 +131,18 @@ function setup() {
 	console.log(board)
 }
 
+function mousePressed() {
+	if(changedPieceForPawn) {
+		for(let i=0; i<promotions.length; i++) {
+			promotions[i].click();
+		}
+	}
+	
+	if(changedPieceForPawn && !changedPieceType) {
+		alert("Almak istediğiniz taşı seçiniz.")
+	}
+}
+
 function draw() {
 	background(255, 238, 173);
 	w_pawn.resize(50, 50);
@@ -150,12 +164,18 @@ function draw() {
 	image(players[player],280,0,120,100)
 	{kingLocation && text("Check!!",750,50)}
 	textSize(15)
+	
 	if(changedPieceForPawn){
 		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
-		var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
+		createPromotionAnimation(color)
+		//var changedPieceType = prompt("Please enter your piece type:", "Queen,Rook,Knight,Bishop").substring(0,1);
+		showPromotionAnimation();
+	}
+
+	if(changedPieceType) {
+		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
 		changedPieceType = changedPieceType == "K" ? "N":changedPieceType;//k is king not knight(n)
 		changedPieceType = color == colors.WHITE ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
-		
 		if(pieces_images[changedPieceType]){
 			let pX = changedPieceForPawn[0];
 			let pY = changedPieceForPawn[1];
@@ -165,6 +185,8 @@ function draw() {
 			board[changedPieceForPawn[0]][changedPieceForPawn[1]] = {"image":pieces_images[changedPieceType],"type":changedPieceType,"color":color,"moveInfo":null}
 			boardNotation = boardUtil.replaceAt(boardNotation,destinationX*8+destinationY,changedPieceType);
 			changedPieceForPawn = null;
+			changedPieceType = null;
+			promotions = [];
 		}
 	}
 
@@ -180,6 +202,9 @@ function draw() {
 }
 
 const findIndex = () =>{
+	if(changedPieceForPawn){
+		return;
+	}
 	var blank_area = offset/2;
 	let color;
 	if(mouseX<blank_area || mouseX>blank_area+8*size || mouseY<blank_area || mouseY>blank_area+8*size){
@@ -228,4 +253,37 @@ const drawCell = (x,y,color) =>{
 	else
 		fill(color) //default
 	rect(x,y,size,size);
+}
+
+const createPromotionAnimation = (color) => {
+	if(promotions.length !== 0) {
+		return;
+	}
+	var positionX = 0;
+	let rook = 'R';
+	let bishop = 'B';
+	let queen = 'Q';
+	let knight = 'N';
+	if(color == colors.WHITE) {
+		rook = 'r'
+		bishop = 'b'
+		queen = 'q'
+		knight = 'n'
+		positionX = size*8+offset-45;
+	}
+	let rookPromotion = new PromotionPieces(pieces_images[rook],positionX,0,"R");
+	let bishopPromotion = new PromotionPieces(pieces_images[bishop],positionX,50,"B");
+	let queenPromotion = new PromotionPieces(pieces_images[queen],positionX,100,"Q");
+	let knightPromotion = new PromotionPieces(pieces_images[knight],positionX,150,"K");
+	promotions.push(rookPromotion);
+	promotions.push(bishopPromotion);
+	promotions.push(queenPromotion);
+	promotions.push(knightPromotion);
+}
+
+const showPromotionAnimation = (color) => {
+	for(let i=0; i<promotions.length; i++) {
+		promotions[i].display();
+		//promotions[i].move();
+	}
 }

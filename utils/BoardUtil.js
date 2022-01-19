@@ -29,7 +29,7 @@ function BoardUtil(){
             move_sound.play();
         } else {
             eat_sound.play();
-            eaten_opponent_pieces.push(board[destinationX][destinationY].image)
+            eaten_opponent_pieces.push({"image":board[destinationX][destinationY].image,"color":board[destinationX][destinationY].color})
         }
         let temp = board[sourceX][sourceY];
         let flag = (sourceX+sourceY)%2 == 0;

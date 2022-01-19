@@ -174,7 +174,6 @@ function draw() {
 
 	if(changedPieceType) {
 		let color = board[changedPieceForPawn[0]][changedPieceForPawn[1]].color;
-		changedPieceType = changedPieceType == "K" ? "N":changedPieceType;//k is king not knight(n)
 		changedPieceType = color == colors.WHITE ? changedPieceType.toLowerCase():changedPieceType.toUpperCase();
 		if(pieces_images[changedPieceType]){
 			let pX = changedPieceForPawn[0];
@@ -195,9 +194,19 @@ function draw() {
 		text(String.fromCharCode(65+i),60,offset*3/4+size*i)
 		text(i+1,offset*2/3+size*i,850)
 	}
-
+	let whiteStep = 0;
+	let blackStep = 0;
 	for(var i=0; i<eaten_opponent_pieces.length;i++) {
-		image(eaten_opponent_pieces[i],0+(i*22),625,28,28)
+		let color = eaten_opponent_pieces[i].color;
+		let y =  650;
+		if(color == colors.WHITE) {
+			y = 625;
+			image(eaten_opponent_pieces[i].image,whiteStep*22,y,28,28)
+			whiteStep -=- 1;
+			continue;
+		}
+		image(eaten_opponent_pieces[i].image,blackStep*22,y,28,28)
+		blackStep -=- 1;
 	}
 }
 
@@ -274,11 +283,8 @@ const createPromotionAnimation = (color) => {
 	let rookPromotion = new PromotionPieces(pieces_images[rook],positionX,0,"R");
 	let bishopPromotion = new PromotionPieces(pieces_images[bishop],positionX,50,"B");
 	let queenPromotion = new PromotionPieces(pieces_images[queen],positionX,100,"Q");
-	let knightPromotion = new PromotionPieces(pieces_images[knight],positionX,150,"K");
-	promotions.push(rookPromotion);
-	promotions.push(bishopPromotion);
-	promotions.push(queenPromotion);
-	promotions.push(knightPromotion);
+	let knightPromotion = new PromotionPieces(pieces_images[knight],positionX,150,"N");
+	promotions.push(...[rookPromotion, bishopPromotion, queenPromotion, knightPromotion]);
 }
 
 const showPromotionAnimation = (color) => {

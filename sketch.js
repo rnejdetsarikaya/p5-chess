@@ -67,7 +67,6 @@ const loadImages = () => {
 	w_queen = loadImage('./images/queen.svg');
 	b_queen = loadImage('./images/queen2.svg');
 	players = [loadGif('./images/player1.gif'), loadGif('./images/player2.gif')];
-	//players_gif = loadAnimation(players_gif);
 	pieces_images = {
 		"r": w_rook,
 		"n": w_knight,
@@ -149,6 +148,7 @@ function draw() {
 	b_pawn.resize(50, 50);
 	w_king.resize(50, 50);
 	b_king.resize(50, 50);
+
 	for (var i = 0; i < board.length; i++) {
 		for (var j = 0; j < board[i].length; j++) {
 			let flag = (i + j) % 2 == 0;
@@ -158,6 +158,7 @@ function draw() {
 			text(i + "," + j, (i * size) + offset / 2, (j * size) + offset / 2 + size)
 		}
 	}
+
 	textSize(50)
 	fill(255)
 	let player = moveCount % 2 == 0 ? 0 : 1;
@@ -193,6 +194,7 @@ function draw() {
 		text(String.fromCharCode(65 + i), 60, offset * 3 / 4 + size * i)
 		text(i + 1, offset * 2 / 3 + size * i, 850)
 	}
+
 	let whiteStep = 0;
 	let blackStep = 0;
 	for (var i = 0; i < eaten_opponent_pieces.length; i++) {

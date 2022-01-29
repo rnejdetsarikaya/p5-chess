@@ -49,7 +49,6 @@ function KingUtil(){
                     continue;
                 }
                 if(board[x][y].color != color  && (pieceList.includes(type) || (this.checkPawnDanger(j, type) && direction == x-destinationX))){
-                    console.log(type, x,y)
                     return true;
                 }
                 break;
